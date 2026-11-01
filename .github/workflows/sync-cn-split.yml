@@ -1,6 +1,6 @@
 name: 每日同步 CN Split Tunnels 到 Cloudflare Zero Trust
 permissions:
-  contents: write           # 只需要此權限，允許 Action 自動提交 Commit 來重新計算 60 天
+  contents: read
 
 on:
   schedule:
@@ -28,10 +28,5 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_PROFILE_ID: ${{ secrets.CF_PROFILE_ID }}
-          MODE: exclude
+          MODE: exclude                     # 可改成 include
         run: python cf-zt-cn-split.py
-
-      - name: 防止 GitHub 60 天自動停用工作流 (Commit 模式)
-        uses: gautamkrishnar/keepalive-workflow@v2
-        with:
-          use_api: false            # 關閉 API 模式，改用純 Commit 模式繞過阻擋
